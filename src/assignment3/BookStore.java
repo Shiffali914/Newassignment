@@ -35,36 +35,34 @@ public class BookStore
       System.out.println("After Removal available book are"+"\n"+list1);
     }
 
-    public static void purchaseBook(String BookId, int quantity) throws BookNotfoundException{
+    public static void purchaseBook(String BookId, int quantity){
 
         boolean found=false;
         Iterator<Book> iterator1= list1.iterator();
         while (iterator1.hasNext()){
             Book book5= iterator1.next();
             if (BookId.equalsIgnoreCase(book5.getBookId())) {
-                if (quantity<= book5.getQuantity())
+                if (quantity<=book5.getQuantity())
                 {
-
                     book5.setQuantity(book5.getQuantity()-quantity);
                     book5.setPurchasequantity(quantity);
                     System.out.println("you have successfully purchased the book");
-                    list2.add(book5);
-                }
-                    System.out.println();
-                    if(book5.getQuantity()<quantity){
-                    throw new BookNotfoundException("book is out of stock");
+
+                } else{
+                    throw new InsufficientStock("book is out of stock");
                     }
+                    list2.add(book5);
                     found=true;
 
-                }
             }
-            if(!found){
-            throw new BookNotfoundException("book is not available");
-
         }
+            if(!found)
+            {
+                throw new BookNotfoundException("book is not available");
+            }
     }
 
-  public static Book searchBook(String title) throws BookNotfoundException{
+  public static Book searchBook(String title){
         boolean found=false;
         for(Book bb:list1) {
             if (title.equalsIgnoreCase(bb.getTitle())) {
@@ -122,6 +120,18 @@ public class BookStore
         System.out.println("enter the id of book which do you want to remove from the list");
         bookId=scanner.nextLine();
         removeBook(bookId);
+        System.out.println();
+
+        // Search a book by title
+        try{
+            System.out.println("enter the title of book which do you want to search");
+            String title=scanner.nextLine();
+            Book searchBook1 = searchBook(title);
+            System.out.println(searchBook1);
+        } catch (BookNotfoundException e) {
+            System.out.println(e.getMessage());
+
+        }
 
         // purchase a book from the store
         try {
@@ -131,25 +141,16 @@ public class BookStore
             quantity = scanner.nextInt();
             purchaseBook(bookId1, quantity);
         }
-        catch (BookNotfoundException e) {
+        catch (BookNotfoundException | InsufficientStock e) {
             System.out.println(e.getMessage());
         }
-        System.out.println();
 
-        // Search a book by title
-      try{
-        System.out.println("enter the title of book which do you want to search");
-        String title=scanner.next();
-           Book searchBook1 = searchBook(title);
-           System.out.println(searchBook1);
-       } catch (BookNotfoundException e) {
-          System.out.println(e.getMessage());
-      }
 
-       //Inventory a list
+        //Inventory list
         System.out.println();
         getinventory();
 
+        //Display purchase a book
         purchasedBook();
 
         Set<String>set1 =new HashSet<>();
