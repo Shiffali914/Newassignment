@@ -141,7 +141,7 @@ public class BookStore
                 System.out.println("enter the quantity");
                 quantity = scanner.nextInt();
                 purchaseBook(bookId1, quantity);
-                System.out.println("Do you want to purchase Y/n");
+                System.out.println("Do you want to purchase more books press Y/n");
                 ch=scanner.next().charAt(0);
             }while(ch =='Y' || ch=='y');
         }
